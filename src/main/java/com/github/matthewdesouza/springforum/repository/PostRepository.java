@@ -9,4 +9,5 @@ import java.util.Set;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     Set<Post> findPostByContentContains(String content);
+    Post findPostById(Long id);
 }
