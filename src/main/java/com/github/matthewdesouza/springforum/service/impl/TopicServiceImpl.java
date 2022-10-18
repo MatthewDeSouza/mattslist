@@ -33,7 +33,7 @@ public class TopicServiceImpl implements TopicService {
      */
     @Override
     public Topic getTopicByName(String name) {
-        return repository.findTopicByName(name);
+        return repository.findTopicByName(name).get(0);
     }
 
     /**

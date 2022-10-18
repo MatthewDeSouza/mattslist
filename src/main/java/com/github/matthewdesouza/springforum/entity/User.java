@@ -11,7 +11,7 @@ import java.util.Set;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"comments", "role"})
 @Entity
 public class User {
     @Id
@@ -37,7 +37,11 @@ public class User {
 
     @Setter(AccessLevel.NONE)
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_id")
+    @JoinTable(
+            name = "user_post_ref",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
     Set<Post> posts;
 
     @Setter(AccessLevel.NONE)

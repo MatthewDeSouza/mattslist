@@ -24,7 +24,11 @@ public class Role {
 
     @Setter(AccessLevel.NONE)
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @JoinTable(
+            name = "role_user_ref",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     Set<User> users;
 
     public void addUser(User user) {

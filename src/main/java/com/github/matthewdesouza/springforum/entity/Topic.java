@@ -11,7 +11,7 @@ import java.util.Set;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = "posts")
 @Entity
 public class Topic {
     @Id
@@ -19,11 +19,15 @@ public class Topic {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     String name;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_id")
+    @JoinTable(
+            name = "topic_post_ref",
+            joinColumns = @JoinColumn(name = "topic_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
     Set<Post> posts;
 
     public void addPost(Post post) {

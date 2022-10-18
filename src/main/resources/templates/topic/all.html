@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Topic - All</title>
+</head>
+<body>
+<div class="topic-all-view">
+  <div th:each="topic: ${topics}">
+    <a th:href="@{/topics/{name}(name=${topic.name})}">
+      <h1 th:text="${topic.name}">Topic</h1>
+    </a>
+    <h2 th:text="|Posts: ${topic.posts.size()}|">Number of Posts</h2>
+  </div>
+</div>
+</body>
+</html>

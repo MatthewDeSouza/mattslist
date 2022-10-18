@@ -3,6 +3,7 @@ package com.github.matthewdesouza.springforum.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -11,7 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"topic", "comments"})
 @Entity
 public class Post {
     @Id
@@ -33,16 +34,28 @@ public class Post {
     @Column(name = "content", nullable = false)
     String content;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "post_user_ref",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     User user;
 
-    @ManyToOne(cascade = CascadeType.ALL,optional = false)
-    @JoinColumn(name = "topic_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "post_topic_ref",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "topic_id")
+    )
     Topic topic;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "comment_id")
+    @JoinTable(
+            name = "post_comment_ref",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "comment_id")
+    )
     Set<Comment> comments;
 
     public void addComment(Comment comment) {

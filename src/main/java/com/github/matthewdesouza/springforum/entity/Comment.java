@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"user", "post"})
 @Entity
 public class Comment {
     @Id
@@ -29,10 +29,18 @@ public class Comment {
     String content;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @JoinTable(
+            name = "comment_user_ref",
+            joinColumns = @JoinColumn(name = "comment_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "post_id")
+    @JoinTable(
+            name = "comment_post_ref",
+            joinColumns = @JoinColumn(name = "comment_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
     Post post;
 }

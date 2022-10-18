@@ -17,7 +17,7 @@ public class PostServiceImpl implements PostService {
 
     /**
      * Find {@link Post} by id within the database.
-     * @param id Id of post.
+     * @param id The id of the post.
      * @return {@link Post}
      */
     @Override
