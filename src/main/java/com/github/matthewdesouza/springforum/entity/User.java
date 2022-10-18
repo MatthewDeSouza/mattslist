@@ -26,6 +26,9 @@ public class User {
     @Column(name = "creation_date", insertable = false, updatable = false)
     LocalDateTime creationDate;
 
+    @Column(name = "username", unique = true, nullable = false)
+    String username;
+
     @Column(name = "email", unique = true, nullable = false)
     String email;
 
