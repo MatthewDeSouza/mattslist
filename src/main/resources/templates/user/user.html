@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Topic - Single</title>
+    <title>Title</title>
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 </head>
 <body>
@@ -17,26 +17,19 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
             <a class="nav-item nav-link" th:href="@{/index}">Home<span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link active" th:href="@{/topics}">Topics</a>
-            <a class="nav-item nav-link" th:href="@{/user}">User</a>
+            <a class="nav-item nav-link" th:href="@{/topics}">Topics</a>
+            <a class="nav-item nav-link active" th:href="@{/user}">User</a>
         </div>
     </div>
 </nav>
 <br/>
-<div class="d-flex flex-column align-items-center justify-content-center">
-    <a th:href="@{/topics/{topicName}/posts/create(topicName=${topic.name})}" class="btn btn-primary">Create listing</a>
-</div>
-<br/>
-<div class="d-flex flex-column align-items-center justify-content-center" th:each="post: ${topic.posts}">
-    <div class="card w-50">
-        <div class="card-header" th:text="${post.getUser().username}">Topic User Username</div>
-        <div class="card-body">
-            <h5 class="card-title" th:text="${post.getTitle()}">Post title</h5>
-            <a th:href="@{/topics/{topicName}/posts/{id}(topicName=${topic.name}, id=${post.id})}"
-               class="btn btn-primary">View</a>
+<div class="d-flex align-items-center justify-content-center ">
+    <div class="card border-dark mb-3" style="max-width: 18rem;">
+        <div class="card-header" th:text="${user.username}">Username</div>
+        <div class="card-body text-dark">
+            <h5 class="card-title" th:text="|Posts: ${user.posts.size()}|">Number of Posts</h5>
         </div>
     </div>
-    <br>
 </div>
 </body>
 </html>

@@ -3,15 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Topic - All</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 </head>
 <body>
-<div class="topic-all-view">
-  <div th:each="topic: ${topics}">
-    <a th:href="@{/topics/{name}(name=${topic.name})}">
-      <h1 th:text="${topic.name}">Topic</h1>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="font-size: 20px;">
+    <a class="navbar-brand">
+        <img th:src="@{/img/logo.webp}" width="45" height="45" class="d-inline-block align-top" alt="Logo">
     </a>
-    <h2 th:text="|Posts: ${topic.posts.size()}|">Number of Posts</h2>
-  </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" th:href="@{/index}">Home<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link active" th:href="@{/topics}">Topics</a>
+            <a class="nav-item nav-link" th:href="@{/user}">User</a>
+        </div>
+    </div>
+</nav>
+<br/>
+<div class="d-flex flex-column align-items-center justify-content-center">
+    <a th:href="@{/topics/create}" class="btn btn-primary">Create Topic</a>
+</div>
+<div class="d-flex flex-column align-items-center justify-content-center" th:each="topic: ${topics}">
+    <br/>
+    <div class="card bg-light mb-3 w-25 text-center" style="max-width: 18rem;">
+        <div class="card-header" th:text="${topic.name}">Topic Name</div>
+        <div class="card-body">
+            <p class="card-text" th:text="|Posts: ${topic.posts.size()}|">Number of posts</p>
+            <a th:href="@{/topics/{name}(name=${topic.name})}" style="font-size: 14px"
+               class="btn btn-primary d-flex flex-column align-items-center justify-content-center">View</a>
+            <div th:if="${privileged}">
+                <br/>
+                <a th:href="@{/topics/delete/{id}(id=${topic.id})}" style="font-size: 14px"
+                   class="btn btn-danger d-flex flex-column align-items-center justify-content-center">Delete</a>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

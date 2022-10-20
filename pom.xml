@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.github.matthewdesouza</groupId>
-    <artifactId>spring-forum</artifactId>
+    <artifactId>mattstlist</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>spring-forum</name>
     <description>spring-forum</description>

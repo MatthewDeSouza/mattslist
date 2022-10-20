@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="font-size: 20px;">
+  <a class="navbar-brand">
+    <img th:src="@{/img/logo.webp}" width="45" height="45" class="d-inline-block align-top" alt="Logo">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" th:href="@{/index}">Home<span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" th:href="@{/topics}">Topics</a>
+      <a class="nav-item nav-link" th:href="@{/user}">User</a>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div class="row col-md-10">
+    <h2>List of Registered Users</h2>
+  </div>
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+    <tr>
+      <th>Username</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each = "user : ${users}">
+      <td th:text = "${user.username}"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
