@@ -3,6 +3,7 @@ package com.github.matthewdesouza.mattslist.service.impl;
 import com.github.matthewdesouza.mattslist.entity.Post;
 import com.github.matthewdesouza.mattslist.repository.PostRepository;
 import com.github.matthewdesouza.mattslist.service.PostService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
  *
  * @author Matthew DeSouza
  */
+@Slf4j
 @Service
 public class PostServiceImpl implements PostService {
     private final PostRepository repository;
@@ -27,6 +29,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public Post findPostById(Long id) {
+        log.info("Finding post by id (id={}).", id);
         return repository.findPostById(id);
     }
 
@@ -36,6 +39,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public void savePost(Post post) {
+        log.info("Saving Post (id={}, title={}).", post.getId(), post.getTitle());
         repository.save(post);
     }
 
@@ -45,6 +49,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public void deletePost(Post post) {
+        log.info("Deleting Post (id={}, title={}).", post.getId(), post.getTitle());
         post.getTopic().removePost(post);
         repository.delete(post);
     }
@@ -55,6 +60,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public void deletePostById(Long id) {
+        log.info("Deleting Post by id (id={}).", id);
         repository.deleteById(id);
     }
 }

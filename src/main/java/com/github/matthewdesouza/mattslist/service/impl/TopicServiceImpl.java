@@ -4,6 +4,7 @@ import com.github.matthewdesouza.mattslist.entity.Post;
 import com.github.matthewdesouza.mattslist.entity.Topic;
 import com.github.matthewdesouza.mattslist.repository.TopicRepository;
 import com.github.matthewdesouza.mattslist.service.TopicService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.List;
  *
  * @author Matthew DeSouza
  */
+@Slf4j
 @Service
 public class TopicServiceImpl implements TopicService {
     private final TopicRepository repository;
@@ -29,6 +31,7 @@ public class TopicServiceImpl implements TopicService {
      */
     @Override
     public List<Topic> getAllTopics() {
+        log.info("Getting all topics.");
         return repository.findAll();
     }
 
@@ -39,6 +42,7 @@ public class TopicServiceImpl implements TopicService {
      */
     @Override
     public List<Topic> getTopicByName(String name) {
+        log.info("Getting Topic by name (name={}).", name);
         return repository.findTopicByName(name);
     }
 
@@ -48,6 +52,7 @@ public class TopicServiceImpl implements TopicService {
      */
     @Override
     public void saveTopic(Topic topic) {
+        log.info("Saving Topic (id={}, name={}", topic.getId(), topic.getName());
         repository.save(topic);
     }
 
@@ -58,6 +63,8 @@ public class TopicServiceImpl implements TopicService {
      */
     @Override
     public void updateTopic(Post post, String name) {
+        log.info("Updating Topic (id={}, oldTitle={}, newTitle={}).",
+                post.getId(), post.getTitle(), name);
         Topic temp = repository.findTopicByName(name).get(0);
         temp.addPost(post);
         repository.save(temp);
@@ -69,6 +76,7 @@ public class TopicServiceImpl implements TopicService {
      */
     @Override
     public void deleteTopic(Topic topic) {
+        log.info("Deleting Topic (id={}, name={}).", topic.getId(), topic.getName());
         repository.delete(topic);
     }
 
@@ -79,6 +87,7 @@ public class TopicServiceImpl implements TopicService {
      */
     @Override
     public Topic getTopicById(Long id) {
+        log.info("Getting Topic by id (id={}).", id);
         return repository.findTopicById(id);
     }
 }

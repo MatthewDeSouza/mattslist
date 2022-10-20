@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode(exclude = "roles")
+@EqualsAndHashCode(exclude = {"roles", "posts"})
 @Entity
 public class User {
     @Id
@@ -34,7 +34,7 @@ public class User {
     String password;
 
     @Setter(AccessLevel.NONE)
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinTable(
             name = "user_post_ref",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -42,7 +42,7 @@ public class User {
     )
     Set<Post> posts;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role_ref",
             joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },

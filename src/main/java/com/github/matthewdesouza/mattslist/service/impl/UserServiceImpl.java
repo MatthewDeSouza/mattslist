@@ -6,6 +6,7 @@ import com.github.matthewdesouza.mattslist.entity.User;
 import com.github.matthewdesouza.mattslist.repository.RoleRepository;
 import com.github.matthewdesouza.mattslist.repository.UserRepository;
 import com.github.matthewdesouza.mattslist.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.stream.Stream;
  *
  * @author Matthew DeSouza
  */
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
@@ -47,6 +49,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User getUserByUsername(String username) {
+        log.info("Getting User by username (username={}).", username);
         return userRepository.findUserByUsername(username);
     }
 
@@ -56,6 +59,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<UserDto> getAllUsers() {
+        log.info("Getting all users.");
         List<User> users = userRepository.findAll();
          return users
                  .stream()
@@ -72,19 +76,38 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void saveUser(UserDto userDto) {
+        log.info("Saving user (username={}).", userDto.getUsername());
         User user = new User();
         user.setUsername(userDto.getUsername());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setCreationDate(LocalDateTime.now());
-        Role role = roleRepository.findRoleByName("ROLE_ADMIN");
+        Role role = roleRepository.findRoleByName("ROLE_USER");
         if (role == null) {
             Role newRole = new Role();
-            newRole.setName("ROLE_ADMIN");
+            newRole.setName("ROLE_USER");
             role = roleRepository.save(newRole);
         }
         user.setRoles(Stream.of(role).collect(Collectors.toSet()));
         userRepository.save(user);
     }
 
+    /**
+     * Saves a user to the database.
+     * @param user {@link User}
+     */
+    @Override
+    public void saveUser(User user) {
+        log.info("Saving User (username={}).", user.getUsername());
+        userRepository.save(user);
+    }
 
+    @Override
+    public void deleteUserByUsername(String username) {
+        log.info("Deleting User (username={}).", username);
+        User user = userRepository.findUserByUsername(username);
+        for (Role role : user.getRoles()) {
+            role.removeUser(user);
+        }
+        userRepository.deleteUserByUsername(user.getUsername());
+    }
 }

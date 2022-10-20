@@ -22,20 +22,17 @@
     </div>
   </div>
 </nav>
+<br/>
 <div class="container">
-  <div class="row col-md-10">
-    <h2>List of Registered Users</h2>
-  </div>
-  <table class="table table-bordered table-hover">
-    <thead class="table-dark">
+  <table class="table">
+    <thead class="thead-dark">
     <tr>
-      <th>Username</th>
+      <th scope="col">Username</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each = "user : ${users}">
-      <td th:text = "${user.username}"></td>
-    </tr>
+    <tr th:each="user: ${users}">
+      <td th:text="${user.username}">Username</td>
     </tbody>
   </table>
 </div>

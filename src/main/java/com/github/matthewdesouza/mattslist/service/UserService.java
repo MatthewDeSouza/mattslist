@@ -24,8 +24,20 @@ public interface UserService {
     List<UserDto> getAllUsers();
 
     /**
-     * Saves a {@link User} to the database.
+     * Saves a {@link User} to the database by UserDto object.
      * @param userDto {@link UserDto}
      */
     void saveUser(UserDto userDto);
+
+    /**
+     * Saves a {@link User} to the database by User object
+     * @param user {@link User}
+     */
+    void saveUser(User user);
+
+    /**
+     * Deletes a {@link User} from the database by username.
+     * @param username {@link String}
+     */
+    void deleteUserByUsername(String username);
 }

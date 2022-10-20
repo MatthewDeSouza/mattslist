@@ -9,6 +9,7 @@ import com.github.matthewdesouza.mattslist.service.PostService;
 import com.github.matthewdesouza.mattslist.service.TopicService;
 import com.github.matthewdesouza.mattslist.service.UserService;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,7 @@ import java.util.List;
  * from said views to store within the models.
  * @author Matthew DeSouza
  */
+@Slf4j
 @NoArgsConstructor
 @Controller
 public class ListingController {
@@ -62,8 +64,11 @@ public class ListingController {
      */
     @GetMapping("/topics")
     public String getAllTopics(Model model, Principal principal) {
+        log.info("Getting all topics");
         List<Topic> topics = topicService.getAllTopics();
-
+        if (topics.isEmpty()) {
+            log.warn("There are no topics.");
+        }
         model.addAttribute(PRIVILEGED, getPrivilegeStatus(principal));
         model.addAttribute(TOPICS, topics);
         return "topic/all";
@@ -76,7 +81,7 @@ public class ListingController {
      */
     @PostMapping("/topics")
     public String saveTopic(@ModelAttribute(TOPIC) Topic topic) {
-
+        log.info("Saving topic (id={}, name={})", topic.getId(), topic.getName());
         if (topicService.getTopicByName(topic.getName()).isEmpty()) {
             topicService.saveTopic(topic);
         }
@@ -91,6 +96,7 @@ public class ListingController {
      */
     @GetMapping("/topics/{topicName}")
     public String getSingleTopicByName(Model model, @PathVariable String topicName) {
+        log.info("Getting single topic (name={})", topicName);
         Topic topic = topicService.getTopicByName(topicName).get(0);
         model.addAttribute(TOPIC, topic);
         return "topic/single";
@@ -103,17 +109,19 @@ public class ListingController {
      */
     @GetMapping("/topics/create")
     public String createTopic(Model model) {
+        log.info("New topic creation requested.");
         model.addAttribute(TOPIC, new Topic());
         return "topic/create";
     }
 
     /**
-     * Deletes a topic from the database given it's id, and redirects to the view of all topics.
+     * Deletes a topic from the database given its id, and redirects to the view of all topics.
      * @param id {@link Long}
      * @return {@link String}
      */
     @GetMapping("/topics/delete/{id}")
     public String deleteTopic(@PathVariable Long id) {
+        log.info("Topic deletion requested for supplied id (id={}).", id);
         Topic topic = topicService.getTopicById(id);
         topicService.deleteTopic(topic);
         return "redirect:/topics";
@@ -140,6 +148,7 @@ public class ListingController {
      */
     @GetMapping("/topics/{topicName}/{id}/delete")
     public String deletePostInTopic(@PathVariable Long id) {
+        log.info("Post deletion requested for supplied id (id={}).", id);
         Post post = postService.findPostById(id);
         postService.deletePost(post);
         return "redirect:/topics";
@@ -154,9 +163,13 @@ public class ListingController {
      */
     @PostMapping("/topics/{name}")
     public String savePostInTopic(@ModelAttribute(TOPIC) Topic topic, @ModelAttribute(POST) Post post, Principal principal) {
+        log.info("Saving Topic (id={}, name={}).", topic.getId(), topic.getName());
         User user = userService.getUserByUsername(principal.getName());
         post.setUser(user);
+        user.addPost(post);
+        userService.saveUser(user);
         topicService.updateTopic(post, topic.getName());
+        log.info("Save call completed for Topic.");
         return "redirect:/topics/{name}";
     }
 
@@ -169,15 +182,20 @@ public class ListingController {
      * @throws InvalidPostAccessException Thrown if {@link Post} does not belong to {@link Topic}.
      */
     @GetMapping("/topics/{topicName}/posts/{id}")
-    public String getSinglePostInTopic(Model model, @PathVariable String id, Principal principal) throws InvalidPostAccessException {
+    public String getSinglePostInTopic(Model model, @PathVariable String id, @PathVariable String topicName, Principal principal) throws InvalidPostAccessException {
+        log.info("Getting single Post (id={}) from Topic (name={}).", id, topicName);
         Post post = postService.findPostById(Long.parseLong(id));
         Topic topic = topicService.getTopicByName(post.getTopic().getName()).get(0);
 
         if (!topic.getName().equals(post.getTopic().getName())) {
+            log.error("Error! Post (id={}) does not belong to Topic (name={})!", id, topicName);
             throw new InvalidPostAccessException("Post does not belong to Topic!");
         }
+        boolean isAdmin = false;
+        if (principal != null) {
+            isAdmin = (getPrivilegeStatus(principal) || principal.getName().equals(post.getUser().getUsername()));
+        }
 
-        boolean isAdmin = (getPrivilegeStatus(principal) || principal.getName().equals(post.getUser().getUsername()));
         String formattedDate = dateTimeFormatter.format(post.getCreationDate());
 
         model.addAttribute(DATE, formattedDate);
@@ -194,6 +212,7 @@ public class ListingController {
      * @return {@link Boolean}
      */
     public boolean getPrivilegeStatus(Principal principal) {
+        log.info("Getting privilege status.");
         if (principal == null) {
             return false;
         }

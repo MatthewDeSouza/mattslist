@@ -2,6 +2,7 @@ package com.github.matthewdesouza.mattslist.service;
 
 import com.github.matthewdesouza.mattslist.entity.User;
 import com.github.matthewdesouza.mattslist.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
  * Implements and modifies the loadByUserName function in {@link UserDetailsService}.
  * @author Matthew DeSouza
  */
+@Slf4j
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
@@ -28,8 +30,10 @@ public class CustomUserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+        log.info("Loading User by username (username={}).", usernameOrEmail);
         User user = userRepository.findUserByUsername(usernameOrEmail);
         if (user == null) {
+            log.error("Username or password is invalid!");
             throw new UsernameNotFoundException("Invalid username or password!");
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(),

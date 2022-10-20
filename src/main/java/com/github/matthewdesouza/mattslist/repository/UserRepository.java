@@ -16,4 +16,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return {@link User}
      */
     User findUserByUsername(String username);
+
+    /**
+     * Deletes a {@link User} from the database by username.
+     * @param username {@link String}
+     */
+    User deleteUserByUsername(String username);
 }

@@ -29,4 +29,9 @@ public class Role {
     @Setter(AccessLevel.NONE)
     @ManyToMany(mappedBy = "roles")
     Set<User> users = new HashSet<>();
+
+    public void removeUser(User user) {
+        users.remove(user);
+        user.getRoles().remove(this);
+    }
 }

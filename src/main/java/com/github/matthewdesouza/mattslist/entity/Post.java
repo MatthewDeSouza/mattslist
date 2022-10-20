@@ -36,7 +36,7 @@ public class Post {
     @Column(name = "content", nullable = false, columnDefinition = "LONGTEXT")
     String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinTable(
             name = "post_user_ref",
             joinColumns = @JoinColumn(name = "post_id"),

@@ -23,12 +23,20 @@
     </div>
 </nav>
 <br/>
-<div class="d-flex align-items-center justify-content-center ">
+<div class="d-flex align-items-center flex-column justify-content-center">
     <div class="card border-dark mb-3" style="max-width: 18rem;">
         <div class="card-header" th:text="${user.username}">Username</div>
         <div class="card-body text-dark">
             <h5 class="card-title" th:text="|Posts: ${user.posts.size()}|">Number of Posts</h5>
+            <h5 class="card-title">Roles:</h5>
+            <div th:each="role: ${user.getRoles()}">
+                <h6 class="card-title" th:text="${role.getName()}">Role</h6>
+            </div>
         </div>
+    </div>
+    <div class="d-flex align-items-center justify-content-center">
+        <a th:href="@{/logout}" style="font-size: 14px"
+           class="btn btn-danger">Logout</a>
     </div>
 </div>
 </body>

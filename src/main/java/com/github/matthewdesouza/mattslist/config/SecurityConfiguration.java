@@ -1,5 +1,6 @@
 package com.github.matthewdesouza.mattslist.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +14,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  * Utilizes the latest Spring Security protocols to manage users, access, and password storage.
  * @author Matthew DeSouza
  */
+@Slf4j
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
@@ -28,6 +30,7 @@ public class SecurityConfiguration {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        log.info("Generating Security Filter Chain");
         httpSecurity
                 .csrf()
                 .disable()
