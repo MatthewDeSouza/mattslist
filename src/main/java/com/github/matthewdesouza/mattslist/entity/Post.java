@@ -7,6 +7,10 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+/**
+ * Model for the Post entity
+ * @author Matthew DeSouza
+ */
 @Getter
 @Setter
 @NoArgsConstructor

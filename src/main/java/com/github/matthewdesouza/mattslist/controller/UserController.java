@@ -19,6 +19,11 @@ import java.security.Principal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Acts as the Controller within the MVC to map models to their respective view, as well as receive data
+ * from said views to store within the models.
+ * @author Matthew DeSouza
+ */
 @Controller
 public class UserController {
     private static final String USER = "user";
@@ -35,11 +40,20 @@ public class UserController {
     }
 
 
+    /**
+     * Mappings for the default view of the web application.
+     * @return {@link String}
+     */
     @GetMapping({"/index", "/", "/home"})
     public String index() {
         return "index";
     }
 
+    /**
+     * Comprehensive view of every user in the application.
+     * @param model {@link Model}
+     * @return {@link String}
+     */
     @GetMapping("/users")
     public String users(Model model) {
         List<UserDto> users = userService.getAllUsers();
@@ -47,6 +61,12 @@ public class UserController {
         return "user/users";
     }
 
+    /**
+     * A view which allows a User to both logout, and view their total posts.
+     * @param model {@link Model}
+     * @param principal {@link Principal}
+     * @return {@link String}
+     */
     @GetMapping("/user")
     public String user(Model model, Principal principal) {
         User user = userService.getUserByUsername(principal.getName());
@@ -55,6 +75,11 @@ public class UserController {
         return "user/user";
     }
 
+    /**
+     * View mapping which allows the user to register to the database.
+     * @param model {@link Model}
+     * @return {@link String}
+     */
     @GetMapping("/register")
     public String register(Model model) {
         if (isAuthenticated()) {
@@ -65,6 +90,13 @@ public class UserController {
         return "user/register";
     }
 
+    /**
+     * Post mapping redirect which saves the supplied details to the database.
+     * @param model {@link Model}
+     * @param userDto {@link UserDto}
+     * @param bindingResult {@link BindingResult}
+     * @return {@link String}
+     */
     @PostMapping("/register/save")
     public String registerUserToDatabase(
             Model model,
@@ -83,6 +115,10 @@ public class UserController {
         return "redirect:/register?success";
     }
 
+    /**
+     * View which allows the user to login to the web application.
+     * @return {@link String}
+     */
     @GetMapping("/login")
     public String login() {
         if (isAuthenticated()) {
@@ -91,6 +127,10 @@ public class UserController {
         return "user/login";
     }
 
+    /**
+     * Returns whether we are currently authenticated through a User.
+     * @return {@link Boolean}
+     */
     private boolean isAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || AnonymousAuthenticationToken.class.
@@ -98,18 +138,5 @@ public class UserController {
             return false;
         }
         return authentication.isAuthenticated();
-    }
-
-    public boolean getPrivilegeStatus(Principal principal) {
-        if (principal == null) {
-            return false;
-        }
-        User user = userService.getUserByUsername(principal.getName());
-        for (Role role : user.getRoles()) {
-            if (role.getName().equals("ROLE_ADMIN")) {
-                return true;
-            }
-        }
-        return false;
     }
 }

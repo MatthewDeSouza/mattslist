@@ -6,6 +6,11 @@ import com.github.matthewdesouza.mattslist.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementation of {@link PostService}.
+ *
+ * @author Matthew DeSouza
+ */
 @Service
 public class PostServiceImpl implements PostService {
     private final PostRepository repository;

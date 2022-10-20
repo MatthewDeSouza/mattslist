@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Implementation of {@link TopicService}.
+ *
+ * @author Matthew DeSouza
+ */
 @Service
 public class TopicServiceImpl implements TopicService {
     private final TopicRepository repository;
@@ -46,6 +51,11 @@ public class TopicServiceImpl implements TopicService {
         repository.save(topic);
     }
 
+    /**
+     * Updates a {@link Topic} by name given a supplied {@link Post}
+     * @param post {@link Post}
+     * @param name {@link String}
+     */
     @Override
     public void updateTopic(Post post, String name) {
         Topic temp = repository.findTopicByName(name).get(0);
@@ -62,6 +72,11 @@ public class TopicServiceImpl implements TopicService {
         repository.delete(topic);
     }
 
+    /**
+     * Gets {@link Topic} by id.
+     * @param id {@link lombok.extern.java.Log}
+     * @return {@link Topic}
+     */
     @Override
     public Topic getTopicById(Long id) {
         return repository.findTopicById(id);

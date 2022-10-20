@@ -15,6 +15,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Implementation of {@link UserService}.
+ *
+ * @author Matthew DeSouza
+ */
 @Service
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
@@ -35,11 +40,20 @@ public class UserServiceImpl implements UserService {
         this.roleRepository = roleRepository;
     }
 
+    /**
+     * Finds {@link User} by username.
+     * @param username {@link String}
+     * @return {@link User}
+     */
     @Override
     public User getUserByUsername(String username) {
         return userRepository.findUserByUsername(username);
     }
 
+    /**
+     * Gets all users from the database.
+     * @return {@link List}
+     */
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
@@ -52,6 +66,10 @@ public class UserServiceImpl implements UserService {
                 }).toList();
     }
 
+    /**
+     * Saves a user to the database. Needs to be manually changed for now to assign a particular role during registration.
+     * @param userDto {@link UserDto}
+     */
     @Override
     public void saveUser(UserDto userDto) {
         User user = new User();

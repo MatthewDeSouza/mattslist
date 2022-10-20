@@ -8,6 +8,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implements and modifies the loadByUserName function in {@link UserDetailsService}.
+ * @author Matthew DeSouza
+ */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
@@ -16,6 +20,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Loads a user from the {@link org.springframework.security.core.userdetails.User} implementation, and assigns values to it.
+     * @param usernameOrEmail {@link String}
+     * @return {@link UserDetails}
+     * @throws UsernameNotFoundException Username was not found to be within the database.
+     */
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
         User user = userRepository.findUserByUsername(usernameOrEmail);

@@ -84,10 +84,10 @@ public class ListingController {
     }
 
     /**
-     *
-     * @param model
-     * @param topicName
-     * @return
+     * Returns the view for a singular topic.
+     * @param model {@link Model}
+     * @param topicName @{@link String}
+     * @return {@link String}
      */
     @GetMapping("/topics/{topicName}")
     public String getSingleTopicByName(Model model, @PathVariable String topicName) {
@@ -96,12 +96,22 @@ public class ListingController {
         return "topic/single";
     }
 
+    /**
+     * Returns the view for creating a new topic.
+     * @param model {@link Model}
+     * @return {@link String}
+     */
     @GetMapping("/topics/create")
     public String createTopic(Model model) {
         model.addAttribute(TOPIC, new Topic());
         return "topic/create";
     }
 
+    /**
+     * Deletes a topic from the database given it's id, and redirects to the view of all topics.
+     * @param id {@link Long}
+     * @return {@link String}
+     */
     @GetMapping("/topics/delete/{id}")
     public String deleteTopic(@PathVariable Long id) {
         Topic topic = topicService.getTopicById(id);
@@ -109,6 +119,12 @@ public class ListingController {
         return "redirect:/topics";
     }
 
+    /**
+     * Returns the view for creating a post for a topic.
+     * @param model {@link Model}
+     * @param topicName {@link String}
+     * @return {@link String}
+     */
     @GetMapping("/topics/{topicName}/posts/create")
     public String createPostInTopic(Model model, @PathVariable String topicName) {
         List<Topic> topic = topicService.getTopicByName(topicName);
@@ -117,6 +133,11 @@ public class ListingController {
         return "post/create";
     }
 
+    /**
+     * Calls the function to delete a post from the topic. Receives topic from service by id.
+     * @param id {@link Long}
+     * @return {@link String}
+     */
     @GetMapping("/topics/{topicName}/{id}/delete")
     public String deletePostInTopic(@PathVariable Long id) {
         Post post = postService.findPostById(id);
@@ -124,6 +145,13 @@ public class ListingController {
         return "redirect:/topics";
     }
 
+    /**
+     * Saves a post in a given topic.
+     * @param topic {@link Topic}
+     * @param post {@link Post}
+     * @param principal {@link Principal}
+     * @return {@link String}
+     */
     @PostMapping("/topics/{name}")
     public String savePostInTopic(@ModelAttribute(TOPIC) Topic topic, @ModelAttribute(POST) Post post, Principal principal) {
         User user = userService.getUserByUsername(principal.getName());
@@ -132,6 +160,14 @@ public class ListingController {
         return "redirect:/topics/{name}";
     }
 
+    /**
+     * Gets a Post by id from the database, returns it to the view.
+     * @param model {@link Model}
+     * @param id {@link String}
+     * @param principal {@link Principal}
+     * @return {@link String}
+     * @throws InvalidPostAccessException Thrown if {@link Post} does not belong to {@link Topic}.
+     */
     @GetMapping("/topics/{topicName}/posts/{id}")
     public String getSinglePostInTopic(Model model, @PathVariable String id, Principal principal) throws InvalidPostAccessException {
         Post post = postService.findPostById(Long.parseLong(id));
@@ -152,6 +188,11 @@ public class ListingController {
         return "post/single";
     }
 
+    /**
+     * This will return whether we are currently authenticated through a user with role ADMIN.
+     * @param principal {@link Principal}
+     * @return {@link Boolean}
+     */
     public boolean getPrivilegeStatus(Principal principal) {
         if (principal == null) {
             return false;

@@ -7,6 +7,10 @@ import lombok.experimental.FieldDefaults;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Model for the Role entity
+ * @author Matthew DeSouza
+ */
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)

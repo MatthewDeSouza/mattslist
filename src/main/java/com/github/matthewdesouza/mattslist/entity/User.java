@@ -8,6 +8,10 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Model for the User entity
+ * @author Matthew DeSouza
+ */
 @Getter
 @Setter
 @ToString
